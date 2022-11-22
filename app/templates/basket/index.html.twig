@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Basket{% endblock %}
+
+{% block body %}
+
+    <div class="example-wrapper">
+        <h1>Basket</h1>
+        <div style="text-align: right">
+            <a href="{{ path('app_menu') }}">Continue shopping</a>
+        </div>
+        <table class="table table-bordered">
+            <tr>
+                <th>Product Name</th>
+                <th>Product Price</th>
+                <th>Product count</th>
+                <th colspan="2">Action</th>
+            </tr>
+            {% for productInBasket in productsInBasket %}
+                <tr>
+                    <td>{{ productInBasket.getProductId().getProductName() }}</td>
+                    <td>
+                        {{
+                        (productInBasket.getProductId().getPrice() * productInBasket.getProductCount() )
+                        }}
+                    </td>
+                    <td>{{ productInBasket.getProductCount() }}</td>
+                    <td>
+                        <a href="{{ path('app_basket', { 'action': 'recount' }) }}/increase?product_id={{ productInBasket.getProductId().getId() }}">+</a>
+                        <a href="{{ path('app_basket', { 'action': 'recount' }) }}/reduce?product_id={{ productInBasket.getProductId().getId() }}">-</a>
+                    </td>
+                    <td><a
+                                href="{{ path('app_basket', { 'action': 'remove' }) }}?product_id={{ productInBasket.getProductId().getId() }}">Delete
+                            from basket</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% if productsInBasket|length > 0 %}
+        <div style="text-align: right">
+            <a href="{{ path('app_basket', { 'action': 'order' }) }}">Order</a>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
